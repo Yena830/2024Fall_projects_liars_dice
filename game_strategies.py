@@ -352,10 +352,3 @@ class Strategy:
         else:
             return self.new_bid(current_bid, total_dice, own_dice)
 
-
-if __name__ == "__main__":
-    randomstrategy = Strategy(prefer_bid = True)
-    action = randomstrategy.make_action([4,5],10,[1,1,1,3,5])
-    print(action)
-
-

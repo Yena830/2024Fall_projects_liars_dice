@@ -166,7 +166,7 @@ class Validation_varaibales:
         >>> bool(df[df["Player"] == "player0"]["Wins"].iloc[0] == 10)
         True
         >>> df[df["Player"] == "player2"]["Win Rate"].iloc[0]
-        '50.00%'
+        0.5
 
         """
         win_rate_df = pd.DataFrame(list(self.results.items()), columns=["Player", "Wins"])
@@ -187,7 +187,7 @@ class Validation_varaibales:
         >>> bool(df[df["Player"] == "player0"]["Start times"].iloc[0] == 30)
         True
         >>> df[df["Player"] == "player0"]["Start rate"].iloc[0]
-        '30.00%'
+        0.3
         """
         start_rate_df = pd.DataFrame(list(self.first_players.items()), columns=["Player", "Start times"])
         start_rate_df['Start rate'] = start_rate_df['Start times'] / self.times
@@ -234,6 +234,21 @@ class Validation_varaibales:
         plt.legend()
         plt.show()
 
+    def plot_win_convergence(self, win_history):
+        """
+        Print the plot of win rate convergence
+
+        :param win_history: A dictionary of winner.
+        """
+        plt.figure(figsize=(10, 6))
+        for player, win_rates in win_history.items():
+            plt.plot(range(len(win_rates)), win_rates, label=f"{player}")
+        plt.xlabel("Number of Games")
+        plt.ylabel("Winning Probability")
+        plt.title("Winning Probability Convergence")
+        plt.legend()
+        plt.show()
+
     def check_liar_win_rate(self):
         """
          Calculate the valid call rate for each player in a liar game.
@@ -259,5 +274,5 @@ class Validation_varaibales:
         return liar_result_df
 
 
-if __name__ == "__main__":
-    pass
+
+
