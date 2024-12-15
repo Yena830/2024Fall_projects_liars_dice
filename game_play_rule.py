@@ -124,7 +124,7 @@ def handle_special_rule(players_dice, player, active_players):
         players_dice.pop(player)
 
 
-def simulate_game(num_players,num_dice, strategies, special_rule = False, first_caller = -1,win_history=None,game_num=0):
+def simulate_game(num_players,num_dice, strategies, special_rule = False, first_caller = -1,win_history=None,game_num=0, randomize_order=True):
     """
     Simulate a game of Liar's Dice with a given number of players, dice, and player strategies.
 
@@ -146,6 +146,7 @@ def simulate_game(num_players,num_dice, strategies, special_rule = False, first_
     :param first_caller: The player ID who starts the game. If -1, a random active player starts.
     :param win_history: The dictionary store the winner history { 'player0': [...], 'player1': [...], ... }
     :param game_num: The current game number.
+    :param randomize_order: Whether to randomize the order of players each round.
 
     :return: A tuple containing:
              - winner (int): The ID of the winning player.
@@ -160,114 +161,234 @@ def simulate_game(num_players,num_dice, strategies, special_rule = False, first_
 
     #Initilize the dice distribution and active players
     players_dice, original_dice = initialize_dice(num_players, num_dice)
-    active_players = set(players_dice.keys())
+    active_players = list(players_dice.keys())
 
-    current_bid = None
+
     #Start with a random player
     if first_caller == -1:
-        current_player = random.choice(list(active_players))
+        current_first_caller = random.choice(active_players)
     else:
-        current_player = first_caller
+        current_first_caller = first_caller
 
     # record the first player and the bid records for validation
-    first_player = current_player
+    first_player = current_first_caller
     bid_record = []
     liar_record = []
     bid_times = 0
+    current_bid = None
 
-    #simulate the game
-    while len(active_players) >1:
-        total_dice = 0
-        for player in active_players:
-            total_dice += len(players_dice[player])
-
-        strategy = strategies[current_player]
-        own_dice = players_dice[current_player]
-        action = strategy.make_action(current_bid, total_dice, own_dice)
-
-        bid_record.append({current_player : action})
-        bid_times += 1
-
-
-        previous_player = current_player
-        while True:
-            previous_player -= 1
-            if previous_player < 0:
-                previous_player = num_players - 1
-            if previous_player in active_players:
-                break
-
-        if action == "liar":
-            all_dice = update_all_dice(players_dice)
-            challenge_bid = current_bid
-            if valid_challenge(current_bid, all_dice):
-                #If the challenge is right, then the previous player lose
-                liar_record.append([bid_times,current_player,challenge_bid,'valid',len(active_players)])
-                if not special_rule :
-                    # Under normal rule,the previous player loses the game and others restart bidding
-                    active_players.remove(previous_player)
-                    players_dice.pop(previous_player)
-
-                else:
-                    # Under special rule, the previous player loses one of dice randomly and everyone restart bidding
-                    handle_special_rule(players_dice,previous_player,active_players)
-                current_bid = None
+    while len(active_players) > 1:
+        # Generate round order
+        round_order = list(active_players)
+        # If first_caller is fixed but eliminated, choose a new one from active players
+        if first_caller != -1:  # first_caller
+            if current_first_caller not in active_players:
+                current_first_caller = None
             else:
-                liar_record.append([bid_times,current_player, challenge_bid, 'invalid',len(active_players)])
-                if not special_rule:
-                    # Under normal rule,the current player loses the game and others restart bidding
-                    active_players.remove(current_player)
-                    players_dice.pop(current_player)
+                round_order.remove(current_first_caller)
+        else:  # first_caller
+            current_first_caller = None
 
-                else:
-                    # Under special rule, the current player loses  one of dice randomly and everyone restart_bidding
-                    handle_special_rule(players_dice, current_player, active_players)
+
+        if randomize_order:
+
+            random.shuffle(round_order)
+        round_order = ([current_first_caller] if current_first_caller is not None else []) + round_order  # Add first_caller at the beginning
+
+        for current_player in round_order:
+
+
+            if current_player not in active_players:
+                continue  # Skip eliminated players
+
+            total_dice = sum(len(players_dice[p]) for p in active_players)
+            own_dice = players_dice[current_player]
+            action = strategies[current_player].make_action(current_bid, total_dice, own_dice)
+
+            bid_record.append({current_player: action})
+            bid_times += 1
+
+            # Find the previous active player
+            previous_player_index = (round_order.index(current_player) - 1) % len(round_order)
+            previous_player = round_order[previous_player_index]
+            while previous_player not in active_players:
+                previous_player_index = (previous_player_index - 1) % len(round_order)
+                previous_player = round_order[previous_player_index]
+
+            # Process liar action
+            if action == "liar":
+
+                all_dice = update_all_dice(players_dice)
+                if valid_challenge(current_bid, all_dice):  # Challenge is valid
+                    liar_record.append([bid_times, current_player, current_bid, 'valid', len(active_players)])
+                    # If the challenge is right, then the previous player lose
+                    if not special_rule:
+                        # Under normal rule,the previous player loses the game and others restart
+                        active_players.remove(previous_player)
+                        players_dice.pop(previous_player)
+                    else:
+                        # Under special rule, the previous player loses one of dice randomly and everyone restart bidding
+                        handle_special_rule(players_dice, previous_player, active_players)
+                else:  # Challenge is invalid
+                    liar_record.append([bid_times, current_player, current_bid, 'invalid', len(active_players)])
+                    if not special_rule:
+                        active_players.remove(current_player)
+                        players_dice.pop(current_player)
+                    else:
+                        handle_special_rule(players_dice, current_player, active_players)
                 current_bid = None
-        else:
-            current_bid = action
-        current_player += 1
-        if current_player >= num_players:
-            current_player = 0
-        while current_player not in active_players:
-            current_player = (current_player + 1) % num_players
-
+                break
+            else:
+                current_bid = action
 
     # Determine the winner
-    winner = next(iter(active_players))
+    winner = active_players[0]
     if win_history is not None and game_num > 0:
         update_winner_history(winner, num_players, win_history, game_num)
 
-    return winner, first_player, bid_record, liar_record, bid_times,original_dice
+    return winner, first_player, bid_record, liar_record, bid_times, original_dice
+
+    # #simulate the game
+    # while len(active_players) >1:
+    #     round_order = [p for p in active_players if p != current_first_caller]
+    #     # Randomize player order for the current round if randomize_order is True
+    #     if randomize_order:
+    #         random.shuffle(round_order)
+    #     round_order = [current_first_caller] + round_order
+    #
+    #
+    #     for current_player in round_order:
+    #         print(round_order)
+    #         print(active_players)
+    #         print(current_player)
+    #         if current_player not in active_players:
+    #             continue
+    #
+    #     # Get the current player
+    #     # current_player = active_players[0]
+    #
+    #         total_dice = 0
+    #         for player in active_players:
+    #             total_dice += len(players_dice[player])
+    #
+    #         strategy = strategies[current_player]
+    #         own_dice = players_dice[current_player]
+    #         action = strategy.make_action(current_bid, total_dice, own_dice)
+    #
+    #         bid_record.append({current_player : action})
+    #         bid_times += 1
+    #
+    #         # Determine the previous player
+    #         current_idx = round_order.index(current_player)
+    #         previous_player = round_order[current_idx - 1]
+    #         while previous_player not in active_players:
+    #             current_idx -= 1
+    #             previous_player = round_order[current_idx % len(round_order)]
+    #         print(previous_player)
+    #
+    #         # previous_player = current_player
+    #         # while True:
+    #         #     previous_player -= 1
+    #         #     if previous_player < 0:
+    #         #         previous_player = num_players - 1
+    #         #     if previous_player in active_players:
+    #         #         break
+    #
+    #         if action == "liar":
+    #             print("liar")
+    #             all_dice = update_all_dice(players_dice)
+    #             challenge_bid = current_bid
+    #             if valid_challenge(current_bid, all_dice):
+    #                 #If the challenge is right, then the previous player lose
+    #                 liar_record.append([bid_times,current_player,challenge_bid,'valid',len(active_players)])
+    #                 if not special_rule :
+    #                     # Under normal rule,the previous player loses the game and others restart bidding
+    #                     active_players.remove(previous_player)
+    #                     players_dice.pop(previous_player)
+    #
+    #                 else:
+    #                     # Under special rule, the previous player loses one of dice randomly and everyone restart bidding
+    #                     handle_special_rule(players_dice,previous_player,active_players)
+    #                 current_bid = None
+    #             else:
+    #                 liar_record.append([bid_times,current_player, challenge_bid, 'invalid',len(active_players)])
+    #                 if not special_rule:
+    #                     # Under normal rule,the current player loses the game and others restart bidding
+    #                     active_players.remove(current_player)
+    #                     players_dice.pop(current_player)
+    #
+    #                 else:
+    #                     # Under special rule, the current player loses  one of dice randomly and everyone restart_bidding
+    #                     handle_special_rule(players_dice, current_player, active_players)
+    #                 current_bid = None
+    #             break
+    #         else:
+    #             current_bid = action
+
+        # # Remove eliminated players and re-randomize order if necessary
+        # if randomize_order and len(active_players) > 1:
+        #     random.shuffle(active_players)
+
+        # current_player += 1
+        # if current_player >= num_players:
+        #     current_player = 0
+        # while current_player not in active_players:
+        #     current_player = (current_player + 1) % num_players
+
+
+    # Determine the winner
+    # winner = next(iter(active_players))
+        # Determine the winner
+    # winner = active_players[0]
+    # if win_history is not None and game_num > 0:
+    #     update_winner_history(winner, num_players, win_history, game_num)
+    #
+    # return winner, first_player, bid_record, liar_record, bid_times,original_dice
 
 
 if __name__ == "__main__":
+    # num_players = 5
+    # num_dice = 5
+    #
+    # # Initialize the results
+    # results = {}
+    # first_players = {}
+    # for i in range(num_players):
+    #     results[f"player{i} wins"] = 0
+    #     first_players[f'game starts with player {i}'] = 0
+    # Strategies = {}
+    # for i in range(num_players):
+    #     Strategies[i] = stra.Strategy()
+    #
+    # # Simulate for n times game
+    # for _ in range(10):
+    #     winner, first_player, bid_record, liar_record, bid_times, original_dices = simulate_game(num_players, num_dice,Strategies,special_rule=False)
+    #     results[f"player{winner} wins"] += 1
+    #     first_players[f"game starts with player {first_player}"] += 1
+    #     print(original_dices)
+    #     print(bid_record)
+    #     print(liar_record)
+    #
+    #
+    #
+    # # print the results
+    # print("\nGame Results:")
+    # for player, wins in results.items():
+    #     print(f"{player} wins: {wins}")
+    # for player, starts in first_players.items():
+    #     print(f"{player}: {starts}")
     num_players = 5
     num_dice = 5
+    iterations = 5
 
-    # Initialize the results
-    results = {}
-    first_players = {}
-    for i in range(num_players):
-        results[f"player{i} wins"] = 0
-        first_players[f'game starts with player {i}'] = 0
-    Strategies = {}
-    for i in range(num_players):
-        Strategies[i] = stra.Strategy()
+    # Define strategies for all players
+    Strategies = {i: stra.Strategy() for i in range(num_players)}
 
-    # Simulate for n times game
-    for _ in range(10):
-        winner, first_player, bid_record, liar_record, bid_times, original_dices = simulate_game(num_players, num_dice,Strategies,special_rule=False)
-        results[f"player{winner} wins"] += 1
-        first_players[f"game starts with player {first_player}"] += 1
-        print(original_dices)
-        print(bid_record)
-        print(liar_record)
+    # Test with randomize_order=True
+    print("Running with randomized player order:")
+    for game_num in range(iterations):
+        winner, first_player, bid_record, liar_record, bid_times, original_dices = simulate_game(
+            num_players, num_dice, Strategies, special_rule=False, randomize_order=True, first_caller=0
+        )
+        print(f"Game {game_num + 1}: Winner: Player {winner}, First Player: {first_player}")
 
-
-
-    # print the results
-    print("\nGame Results:")
-    for player, wins in results.items():
-        print(f"{player} wins: {wins}")
-    for player, starts in first_players.items():
-        print(f"{player}: {starts}")
