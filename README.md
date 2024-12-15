@@ -68,13 +68,13 @@ Run the notebook.
 ## Experiments
 ### 1. First Caller Advantage
 We set player0 to be the first caller in all games.
-Expected result : The player choose to bid first(player0) would have a higher win rate than other players
+Expected result: The player chooses to bid first(player0) would have a higher win rate than other players
 #### a. Test for original player order
-Under the original game order, i.e., 0 -> 1 -> 2 -> 3 -> 4, player4's win rate is significantly higher than that of the other players, while player1 has the lowest win rate. There is a clear distinction in win rates among the players. 
+Under the original game order, i.e., 0 -> 1 -> 2 -> 3 -> 4, player 4's win rate is significantly higher than that of the other players, while player 1 has the lowest win rate. There is a clear distinction in win rates among the players. 
 Clearly, this is completely inconsistent with our hypothesis.
 ![img_7.png](images/img_7.png)
-#### b. Test for randomize player order
-Since the order in which players take their turns significantly impacts the win rates, we improved the player order by introducing a randomization mechanism. In this improved approach, the turn order is shuffled at the start of each game, ensuring that each round follows a different random order, while keeping the first caller fixed. This approach better reveals the true pattern of the game.
+#### b. Test for randomized player order
+Since the order in which players take their turns significantly impacts the win rates, we improved the player order by introducing a randomization mechanism. In this improved approach, the turn order is shuffled at the start of each game, ensuring that each round follows a different random order while keeping the first caller fixed. This approach better reveals the true pattern of the game.
 
 As we can see from the results in the improvement method's plots, after randomizing the game order of all players while keeping player0 fixed as the first caller, the players' win rates significantly converge to around 0.2. Among them, player0 shows a slight advantage.
 
@@ -85,26 +85,26 @@ By randomizing the player order, we can roughly conclude that the first caller d
 ### 2. Preferred Dice Bid
 #### a. Test for original player order
 ![img_12.png](images/img_12.png)
-#### b. Test for randomize player order
+#### b. Test for randomized player order
 ![img_13.png](images/img_13.png)
 
 ### 3. Threshold for Calling "Liar"
 #### Normal Threshold: 50% of the total number of dice in play.
 #### Optimal Threshold: based on a calculated probability ratio that accounts for the total dice and the player’s own dice. ( number of dice with the bid face value in own dice + 50% of the number of remaining dice)¶
-We set player0 to use normal threshold strategy and player1 to use optimal threshold strategy.
-Expected result: Players using certain thresholds to decide when to challenge have higher win rate than players who challenge randomly.
+We set player0 to use the normal threshold strategy and player1 to use the optimal threshold strategy.
+Expected result: Players using certain thresholds to decide when to challenge have a higher win rate than players who challenge randomly.
 #### a. Test for original player order
 ![img_11.png](images/img_11.png)
-#### b. Test for randomize player order
+#### b. Test for randomized player order
 ![img_10.png](images/img_10.png)
 ### 4. Optimal Strategy Combination
 #### a. Test for original player order
 ![img_14.png](images/img_14.png)
-#### b. Test for randomize player order
+#### b. Test for randomized player order
 ![img_15.png](images/img_15.png)
 ### 5. Special Rule Impact
 #### a. Test for original player order
 ![img_16.png](images/img_16.png)
-#### b. Test for randomize player order
+#### b. Test for randomized player order
 ![img_17.png](images/img_17.png)
 
