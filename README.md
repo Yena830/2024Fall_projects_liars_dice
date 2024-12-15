@@ -1,12 +1,13 @@
 # Analyzing Win Probabilities in the Dice Game "Liar's Dice" Using Monte Carlo Simulations
 ## Project Overview
 This project simulates and analyzes the dice game Liar's Dice using Monte Carlo simulations. The primary objective is to explore how different player strategies and rule changes impact gameplay outcomes. Additionally, the project aims to validate the fairness and randomness of the game mechanics.
+Project Type: Type II - Original Monte Carlo Analysis 
 
 ## Team Members:
 Yueyue Lin, GitHub: https://github.com/Yena830
 Jiajing Liang, GitHub: https://github.com/Fiona729
 
-Project Type: Type II - Original Monte Carlo Analysis 
+
 
 ## Game Overview
 Players bid on dice outcomes, considering both quantity and face value.
