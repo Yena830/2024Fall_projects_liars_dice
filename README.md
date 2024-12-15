@@ -42,8 +42,21 @@ Integrates the core modules for hypothesis testing and result visualization.
 ## Hypotheses
 The project tests several hypotheses related to gameplay dynamics and strategies:
 
-First Caller Advantage: The first player has a higher win rate due to their ability to set the initial bid.
-Preferred Dice Bid: Players bidding based on their most frequent dice achieve higher win rates.
-Threshold for Calling "Liar": Players using optimized thresholds for challenges outperform those using random strategies.
-Optimal Strategy Combination: Combining threshold-based and preferred dice bidding yields the best outcomes.
-Special Rule Impact: Modifications to the rules (e.g., reducing one die instead of eliminating a player) affect fairness and strategy effectiveness.
+1. First Caller Advantage: The first player has a higher win rate due to their ability to set the initial bid.
+2. Preferred Dice Bid: Players bidding based on their most frequent dice achieve higher win rates.
+3. Threshold for Calling "Liar": Players using optimized thresholds for challenges outperform those using random strategies.
+4. Optimal Strategy Combination: Combining threshold-based and preferred dice bidding yields the best outcomes.
+5. Special Rule Impact: Modifications to the rules (e.g., reducing one die instead of eliminating a player) affect fairness and strategy effectiveness.
+
+
+## Validation
+To ensure the robustness of the simulations, the following validations were conducted:
+
+1. Dice Distribution: Verified that dice rolls follow a uniform distribution.
+2. Challenge Distribution: Confirmed players' challenge behavior aligns with expectations under random strategies.
+3. Random Strategy Outcomes: Demonstrated uniform win rates across players when no strategy is applied.
+
+## How to run
+Clone this repository.
+Run the notebook.
+
