@@ -7,7 +7,9 @@ Project Type: Type II - Original Monte Carlo Analysis
 Yueyue Lin, GitHub: https://github.com/Yena830
 Jiajing Liang, GitHub: https://github.com/Fiona729
 
-
+## How to run
+Clone this repository.
+Run the notebook.
 
 ## Game Overview
 Players bid on dice outcomes, considering both quantity and face value.
@@ -49,6 +51,11 @@ The project tests several hypotheses related to gameplay dynamics and strategies
 4. Optimal Strategy Combination: Combining threshold-based and preferred dice bidding yields the best outcomes.
 5. Special Rule Impact: Modifications to the rules (e.g., reducing one die instead of eliminating a player) affect fairness and strategy effectiveness.
 
+## Random Variables
+1. Dice Rolls: Dice fave value and the number of fave value
+2. Player Order: Who is the first caller and the player order in each round.
+3. Challenge choices: Whether choose bid or challenge
+4. The bid that player will give : [quantity, face value]
 
 ## Validation
 To ensure the robustness of the simulations, the following validations were conducted:
@@ -61,9 +68,7 @@ To ensure the robustness of the simulations, the following validations were cond
 ![img_6.png](images/img_6.png)
 3. Random Strategy Outcomes: Demonstrated uniform win rates across players when no strategy is applied.
 ![img_3.png](images/img_3.png)![img.png](images/img.png) ![img_1.png](images/img_1.png)
-## How to run
-Clone this repository.
-Run the notebook.
+
 
 ## Experiments
 ### 1. First Caller Advantage
