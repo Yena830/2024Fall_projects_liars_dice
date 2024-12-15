@@ -54,13 +54,13 @@ The project tests several hypotheses related to gameplay dynamics and strategies
 To ensure the robustness of the simulations, the following validations were conducted:
 
 1. Dice Distribution: Verified that dice rolls follow a uniform distribution.
-![img_2.png](img_2.png)
-![img_4.png](img_4.png)
+![img_2.png](images/img_2.png)
+![img_4.png](images/img_4.png)
 2. Challenge Distribution: Confirmed players' challenge behavior aligns with expectations under random strategies.
-![img_5.png](img_5.png)
-![img_6.png](img_6.png)
+![img_5.png](images/img_5.png)
+![img_6.png](images/img_6.png)
 3. Random Strategy Outcomes: Demonstrated uniform win rates across players when no strategy is applied.
-![img_3.png](img_3.png)![img.png](img.png) ![img_1.png](img_1.png)
+![img_3.png](images/img_3.png)![img.png](images/img.png) ![img_1.png](images/img_1.png)
 ## How to run
 Clone this repository.
 Run the notebook.
@@ -72,7 +72,7 @@ Expected result : The player choose to bid first(player0) would have a higher wi
 #### a. Test for original player order
 Under the original game order, i.e., 0 -> 1 -> 2 -> 3 -> 4, player4's win rate is significantly higher than that of the other players, while player1 has the lowest win rate. There is a clear distinction in win rates among the players. 
 Clearly, this is completely inconsistent with our hypothesis.
-![img_7.png](img_7.png)
+![img_7.png](images/img_7.png)
 #### b. Test for randomize player order
 Since the order in which players take their turns significantly impacts the win rates, we improved the player order by introducing a randomization mechanism. In this improved approach, the turn order is shuffled at the start of each game, ensuring that each round follows a different random order, while keeping the first caller fixed. This approach better reveals the true pattern of the game.
 
@@ -80,13 +80,13 @@ As we can see from the results in the improvement method's plots, after randomiz
 
 By randomizing the player order, we can roughly conclude that the first caller does have a certain win rate advantage, but this must be under the premise that other players are not affected by a fixed sequence.
 
-![img_8.png](img_8.png)
+![img_8.png](images/img_8.png)
 
 ### 2. Preferred Dice Bid
 #### a. Test for original player order
-![img_12.png](img_12.png)
+![img_12.png](images/img_12.png)
 #### b. Test for randomize player order
-![img_13.png](img_13.png)
+![img_13.png](images/img_13.png)
 
 ### 3. Threshold for Calling "Liar"
 #### Normal Threshold: 50% of the total number of dice in play.
@@ -94,17 +94,17 @@ By randomizing the player order, we can roughly conclude that the first caller d
 We set player0 to use normal threshold strategy and player1 to use optimal threshold strategy.
 Expected result: Players using certain thresholds to decide when to challenge have higher win rate than players who challenge randomly.
 #### a. Test for original player order
-![img_11.png](img_11.png)
+![img_11.png](images/img_11.png)
 #### b. Test for randomize player order
-![img_10.png](img_10.png)
+![img_10.png](images/img_10.png)
 ### 4. Optimal Strategy Combination
 #### a. Test for original player order
-![img_14.png](img_14.png)
+![img_14.png](images/img_14.png)
 #### b. Test for randomize player order
-![img_15.png](img_15.png)
+![img_15.png](images/img_15.png)
 ### 5. Special Rule Impact
 #### a. Test for original player order
-![img_16.png](img_16.png)
+![img_16.png](images/img_16.png)
 #### b. Test for randomize player order
-![img_17.png](img_17.png)
+![img_17.png](images/img_17.png)
 
