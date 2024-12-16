@@ -88,6 +88,8 @@ By randomizing the player order, we can roughly conclude that the first caller d
 ![img_8.png](images/img_8.png)
 
 ### 2. Preferred Dice Bid
+We set player0 to use preferred dice bid strategy.
+##### Expected result: The Prefer-Bid Hypothesis suggests that a player who prioritizes bidding using the face value of the dice they hold in the highest quantity will outperform opponents using random strategies. This hypothesis assumes that leveraging personal dice knowledge provides a statistical advantage in the game.
 #### a. Test for original player order
 ![img_12.png](images/img_12.png)
 #### b. Test for randomized player order
@@ -97,19 +99,44 @@ By randomizing the player order, we can roughly conclude that the first caller d
 #### Normal Threshold: 50% of the total number of dice in play.
 #### Optimal Threshold: based on a calculated probability ratio that accounts for the total dice and the player’s own dice. ( number of dice with the bid face value in own dice + 50% of the number of remaining dice)¶
 We set player0 to use the normal threshold strategy and player1 to use the optimal threshold strategy.
-Expected result: Players using certain thresholds to decide when to challenge have a higher win rate than players who challenge randomly.
+##### Expected result: Players using certain thresholds to decide when to challenge have a higher win rate than players who challenge randomly.
+##### Actual result : ✅ As Expected.
+Players using the "Threshold" strategy showed higher win rates compared to those who challenge randomly. Moreover, the optimal method proves to be superior to the normal threshold, as players employing it can achieve even higher win rates.
 #### a. Test for original player order
 ![img_11.png](images/img_11.png)
 #### b. Test for randomized player order
+Under the randomized player order, the two threshold strategies still maintain a relatively higher win rate compared to the random strategy. Moreover, it is evident that the optimal threshold achieves a higher win rate than the normal threshold, further supporting and confirming our previous findings.
 ![img_10.png](images/img_10.png)
 ### 4. Optimal Strategy Combination
+##### We set player use different strategies:
+1. player0 : Normal threshold strategy
+2. player1 : Optimal threshold strategy
+3. player2 : Prefer Dice Bid strategy
+4. player3: Normal threshold + Prefer Dice Bid strategy
+5. player4: Optimal threshold+ Prefer Dice Bid strategy
+##### Expected result : Players who combine thresholds with preferred dice bid achieve the highest win rates.
+##### Actual result : ✅ As Expected. Players using the preferred dice bid strategy combining with optimal threshold showed the highest win rates compared to those used other strategies.
 #### a. Test for original player order
 ![img_14.png](images/img_14.png)
 #### b. Test for randomized player order
+Under the randomized player order, we can see the fixed player order introduces an inherent advantage, particularly favoring Player 4 (Optimal threshold + Prefer Dice Bid strategy). In contrast, randomized player order balances this effect, leading to more equitable win probabilities across players. 
+However,Player 4 still maintains the highest win rate in both cases, indicating the robustness of the strategy, while other strategies perform more competitively under randomized conditions.
 ![img_15.png](images/img_15.png)
 ### 5. Special Rule Impact
+##### We set player use different strategies:
+1. player0 : Normal threshold strategy
+2. player1 : Optimal threshold strategy
+3. player2 : Prefer Dice Bid strategy
+4. player3: Normal threshold + Prefer Dice Bid strategy
+5. player4: Optimal threshold+ Prefer Dice Bid strategy
+##### For Hypothesis 5, we tested the impact of modifying the rule. Instead of eliminating a player after a failed challenge, they lose one die. We hypothesized that this adjustment would affect game fairness and the win rate distribution among players.
+##### Expected result : Modifying the rule (reducing one die instead of eliminating a player if a challenge happens) affects game fairness and the win rate of players.
+##### Actual result : ✅ As Expected. The win rate of different strategies changes, and the “good” strategies performs better , the “bad” strategies performs worse under special rule than under normal rule.
+#### In the special rule, the winning probabilities for player3 and player4 (who use stronger strategies) further increase, consolidating their dominance. This happens because the gradual elimination (losing dice instead of immediate removal) allows these stronger strategies to leverage their advantage over more rounds.
+Meanwhile, players 0, 1, and 2 show more similar and lower winning probabilities under the special rule, indicating that weaker strategies converge to a similar performance level.
 #### a. Test for original player order
-![img_16.png](images/img_16.png)
+![img_18.png](images/img_18.png)
 #### b. Test for randomized player order
-![img_17.png](images/img_17.png)
+##### The comparison shows that randomizing player order reduces positional advantages. In the fixed order graph, player4 and player3 have a clear winning advantage, while in the randomized order graph, their probabilities converge, creating a fairer distribution of wins across all players
+![img_19.png](images/img_19.png)
 
