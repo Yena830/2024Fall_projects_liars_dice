@@ -140,3 +140,7 @@ Meanwhile, players 0, 1, and 2 show more similar and lower winning probabilities
 ##### The comparison shows that randomizing player order reduces positional advantages. In the fixed order graph, player4 and player3 have a clear winning advantage, while in the randomized order graph, their probabilities converge, creating a fairer distribution of wins across all players
 ![img_19.png](images/img_19.png)
 
+## Limitation
+1. Simplified Strategies: The current model assumes players strictly follow predefined strategies, which limits the exploration of adaptive or mixed strategies seen in real-world gameplay.
+2. Unrealistic Assumptions: Errors such as misreading dice, miscalculations, or hesitation are not considered, which may differ from actual player behavior. Also cannot simulate the players' memory.
+3. Limited Rule Variability: Only a small range of rule modifications was tested, and their impact on gameplay dynamics and fairness may not be fully explored.
