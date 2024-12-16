@@ -243,20 +243,6 @@ class Strategy:
                 new_quantity = random.randint(quantity + 1, total_dice)
             return [new_quantity, smallest_face]
 
-        # for face in preferred_faces:
-        #     if face > face_value:
-        #         # Try to increase the face value with the same or slightly higher quantity
-        #         new_quantity = quantity
-        #         if new_quantity < total_dice:
-        #             new_quantity = random.choice([new_quantity, new_quantity + 1])
-        #         return [new_quantity, face]
-        #
-        # # If no preferred face is higher, try increasing the quantity with the same face
-        # #it seems like need to modify to satisfy different current bid situation
-        # if quantity < total_dice:
-        #     return [quantity + 1, face_value]
-        # else:
-        #     return "liar"
 
 
     def new_bid(self, current_bid, total_dice, own_dice):
